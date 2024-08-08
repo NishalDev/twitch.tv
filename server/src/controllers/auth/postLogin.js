@@ -6,7 +6,7 @@ export const postLogin = async (req, res) => {
    try{
     const {email, password} = req.body;
     const user = await User.findOne({
-        email: email,
+        email: email.toLowercase(),
     });
     if(user && (await bcrypt.compare(password, user.password))){
         //create jwt token

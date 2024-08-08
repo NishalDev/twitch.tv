@@ -21,7 +21,7 @@ export const postRegister = async (req, res) => {
             // user details which we would like to encrypt in jWT token
             {
                 userId: user._id,
-                email,
+                email: user.email,
             },
             // secret
             process.env.TOKEN_KEY,
@@ -34,7 +34,7 @@ export const postRegister = async (req, res) => {
         //send success response back to the user with data of the registered user and JWT  
         return res.status(201).json({
             userDetails: {
-                email,
+                email: user.email,
                 username,
                 token,
             },
@@ -44,6 +44,5 @@ export const postRegister = async (req, res) => {
         console.log(err);
         return res.status(500).send('Error occured. Please try again')
     }
-    return res.send("User has been added to database");
 };
  
