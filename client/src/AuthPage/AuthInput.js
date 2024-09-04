@@ -25,7 +25,7 @@ const handleInputBlur = (e) => {
             type={type}
             value={value}
             onChange={handleValueChange}
-          //  onBlur={handleInputBlur}
+            onBlur={handleInputBlur}
         />
         <span className="auth-form-validation-message">
             {showErrorMessage && validationMessage}
