@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Logo } from "./Logo";
 import { AuthInput } from "./AuthInput";
 import { emailValidationMessage, PasswordConfvalidationMessage, PasswordvalidationMessage, usernamevalidationMessage, validateEmail, validatePassword, validatePasswordConf, validateUsername } from "../shared/validators";
+import { useRegister } from "../shared/hooks";
 export const Register = ({ switchAuthHandler }) => {
+    const{isLoading,register} = useRegister();
     const [formState, setFormState] = useState({
         email: {
             value: '',
@@ -66,7 +68,12 @@ export const Register = ({ switchAuthHandler }) => {
         }));
     };
 
-   
+   const handleRegister = (event) => {
+    event.preventDefault();
+    register(formState.email.value, formState.password.value, formState.username.value);
+   };
+
+   const isSubmitButtonDisabled = !formState.password.isValid || !formState.email.isValid || !formState.username.isValid || formState.password.value !== formState.passwordConf.value || isLoading;
     return (
         <div class="register-container">
             <Logo text={'Sign up to Clone'} />
@@ -109,9 +116,10 @@ export const Register = ({ switchAuthHandler }) => {
                     validationMessage={PasswordConfvalidationMessage}
                 />
                 
-                Register
+             
                 <button
-                disabled={!formState.password.isValid || !formState.email.isValid || !formState.username.isValid || formState.password.value !== formState.passwordConf.value}>Log in</button>
+                onClick={handleRegister}
+                disabled={isSubmitButtonDisabled}>Register</button>
             </form>
             <span onClick={switchAuthHandler} className="auth-form-switch-label">
                 Already have an account? Sign in
