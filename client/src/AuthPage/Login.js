@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Logo } from "./Logo";
 import { AuthInput } from "./AuthInput";
 import { emailValidationMessage, PasswordvalidationMessage, validateEmail, validatePassword } from "../shared/validators";
+import { useLogin } from "../shared/hooks";
 export const Login = ({ switchAuthHandler }) => {
+    const {login, isLoading} = useLogin()
+
     const [formState, setFormState] = useState({
         email: {
             value: '',
@@ -49,8 +52,13 @@ export const Login = ({ switchAuthHandler }) => {
             },
         }));
     };
+    const handleLogin = (event) =>{
+        event.preventDefault();
 
-    console.log(formState);
+        login(formState.email.value, formState.password.value);
+    }
+    const isSubmitButtonDisabled = isLoading || !formState.password.isValid || !formState.email.isValid; 
+
     return (
         <div class="login-container">
             <Logo text={'Log in to Clone'} />
@@ -75,7 +83,8 @@ export const Login = ({ switchAuthHandler }) => {
                     validationMessage={PasswordvalidationMessage}
                 />
                 <button
-                disabled={!formState.password.isValid || !formState.email.isValid}>Log in</button>
+                onClick={handleLogin}
+                disabled={isSubmitButtonDisabled}>Log in</button>
             </form>
             <span onClick={switchAuthHandler} className="auth-form-switch-label">
                 Don't have an Account? sign up
